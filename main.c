@@ -6,25 +6,30 @@
 int main(int argc, char const* argv[]) {
     List *queue;
     List *stack;
-    int i, popped;
+    int popped,i;
     bool result;
 
+    queue = (List*)malloc(sizeof(List));
+    stack = (List*)malloc(sizeof(List));
+    queue -> next = NULL;
+    stack -> next = NULL;
+
     for(i = 0; i < TEST_SIZE; ++i) {
-        push(&queue, i);
-        push(&stack, i);
+        push(queue, i);
+        push(stack, i);
     }
 
     for(i = 0; i < TEST_SIZE; ++i) {
-        result = unshift(&queue, &popped);
+        result = shift(queue, &popped);
         assert(result);
         assert(popped == i);
-        result = pop(&stack, &popped);
+        result = pop(stack, &popped);
         assert(result);
         assert(popped == TEST_SIZE - 1 - i);
     }
 
-    assert(!unshift(&queue, &popped));
-    assert(!pop(&stack, &popped));
+    assert(!shift(queue, &popped));
+    assert(!pop(stack, &popped));
 
     delete(queue);
     delete(stack);
