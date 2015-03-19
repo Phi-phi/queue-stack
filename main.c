@@ -6,13 +6,11 @@
 int main(int argc, char const* argv[]) {
     List *queue;
     List *stack;
-    int popped,i;
+    int i, popped;
     bool result;
 
-    queue = (List*)malloc(sizeof(List));
-    stack = (List*)malloc(sizeof(List));
-    queue -> next = NULL;
-    stack -> next = NULL;
+    new_list(&queue);
+    new_list(&stack);
 
     for(i = 0; i < TEST_SIZE; ++i) {
         push(queue, i);

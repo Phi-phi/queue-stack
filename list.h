@@ -8,45 +8,57 @@
 
 typedef struct List_box{
 	int data;
-	
+
+	struct List_box *first;
+	struct List_box *prev;
 	struct List_box *next;
 }List;
+
+void new_list(List **l){
+	(*l) = (List*)malloc(sizeof(List));
+	(*l) -> first = NULL;
+	(*l) -> prev = NULL;
+	(*l) -> next = NULL;
+}
 
 void push(List *l, int num){
 	List *new = (List*)malloc(sizeof(List));
 	new -> data = num;
 	new -> next = l -> next;
+	new -> prev = l;
+	if(l -> first == NULL){
+		l -> first = new;
+		new -> first = new;
+	}else{
+		l -> next -> prev = new;
+	}
 	l -> next = new;
 }
 
 bool shift(List *l, int *popped){
 	List *del;
-	bool ret = 0;
 	if(l -> next != NULL){
-		while(l -> next -> next != NULL){
-			l = l -> next;
-		}
-		del = l -> next;
+		del = l -> first;
 		*popped = del -> data;
-		l -> next = l -> next -> next;
+		l -> first = del -> prev;
+		del -> prev -> next = NULL;
 		free(del);
 
-		ret = 1;
+		return true;
 	}
-	return ret;
+	return false;
 }
 
 bool pop(List *l, int *popped){
 	List *del;
-	bool ret = 0;
 	if(l -> next != NULL){
 		del = l -> next;
 		*popped = del -> data;
 		l -> next = l -> next -> next;
 		free(del);
-		ret = 1;
+		return true;
 	}
-	return ret;
+	return false;
 }
 
 void delete(List *l){
